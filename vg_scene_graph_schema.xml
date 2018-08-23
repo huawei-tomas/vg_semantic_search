@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PMML version="3.0"
+  xmlns="http://www.dmg.org/PMML-3-0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema_instance" >
+  <labels>
+    <!-- First things first, we need an object node -->
+    <label name="object">
+      <properties>
+        <property name="ObjectID" cardinality="single" dataType="int" />
+        <property name="ImageID" cardinality="single" dataType="int" />
+        <property name="LabelName" cardinality="single" dataType="string" />
+        <property name="CanonicalObject" cardinality="single" dataType="int" />
+      </properties>
+    </label>
+
+    <!-- This is the edge Element. -->
+    <label name="relationship">
+      <properties>
+        <property name="RelationshipID" cardinality="single" dataType="int" />
+        <property name="Predicate" cardinality="single" dataType="string" />
+        <property name="CanonicalPredicate" cardinality="single" dataType="int" />
+      </properties>
+    </label>
+
+  </labels>
+</PMML>
