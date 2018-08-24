@@ -33,6 +33,8 @@ def visualize_regions(image, regions):
     plt.tick_params(labelbottom='off', labelleft='off')
     fname = 'app/static/{}.png'.format(image.id)
     plt.savefig(fname)
+    plt.gcf().clear()
+    plt.gca().clear()
     return fname
 
 
