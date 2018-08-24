@@ -18,3 +18,7 @@ has("predicate", rel).inV().\
 has("name", obj2).\
 values("image_id").toList()
     return q
+
+def get_graph():
+    graph = Graph()
+    return graph.traversal().withRemote(DriverRemoteConnection('ws://localhost:8182/gremlin','g'))
