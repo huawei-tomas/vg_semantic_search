@@ -6,7 +6,7 @@ import json
 import wget
 import zipfile
 import networkx as nx
-
+import sys
 
 def fetch_data():
     urls = [
@@ -30,8 +30,12 @@ def load_objs(obj_fname="./data/objects.json.zip"):
     Args:
         obj_fname: The filename of the zipped object JSON from Visual Genome.
     """
-    with zipfile.ZipFile(obj_fname, 'r') as f:
-        objs = json.loads(f.read('objects.json'))
+    if sys.version_info < (3, 0):
+        with zipfile.ZipFile(obj_fname, 'r') as f:
+            objs = json.loads(f.read('objects.json'))
+    else:
+        with zipfile.ZipFile(obj_fname, 'r') as f:
+            objs = json.loads(f.read('objects.json').decode('utf8'))
     return objs
 
 def load_rels(rel_fname="./data/relationships.json.zip"):
@@ -40,8 +44,12 @@ def load_rels(rel_fname="./data/relationships.json.zip"):
     Args:
         rel_fname: The filename of the relationship object JSON from Visual Genome.
     """
-    with zipfile.ZipFile(rel_fname, 'r') as f:
-        rels = json.loads(f.read('relationships.json'))
+    if sys.version_info < (3, 0):
+        with zipfile.ZipFile(rel_fname, 'r') as f:
+            rels = json.loads(f.read('relationships.json'))
+    else:
+        with zipfile.ZipFile(rel_fname, 'r') as f:
+            rels = json.loads(f.read('relationships.json').decode('utf8'))
     return rels
 
 def make_disambig(alias_fname):

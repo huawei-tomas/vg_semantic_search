@@ -24,9 +24,9 @@ def search():
     edge = (subject, relationship, object)
     g = get_graph()
     q = query_for_edge(g, edge)
-    fname = []
+    fnames = []
     for x in q:
-        visualize_image(x, edges=[edge])
+        fnames.append(visualize_image(x, edges=[edge]))
     print(edge)
     print(q)
 

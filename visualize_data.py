@@ -4,10 +4,16 @@
 import urllib3
 import matplotlib.pyplot as plt
 from matplotlib.patches import Rectangle
-from StringIO import StringIO
+
+import sys
 from visual_genome import api as vg
 from PIL import Image as PIL_Image
+if sys.version_info < (3, 0):
+    from StringIO import StringIO
+else:
+    from io import StringIO
 
+urllib3.disable_warnings()
 
 def visualize_regions(image, regions):
     http = urllib3.PoolManager()

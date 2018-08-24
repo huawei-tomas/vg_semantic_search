@@ -7,7 +7,7 @@ from matplotlib.patches import Rectangle
 from StringIO import StringIO
 from visual_genome import api as vg
 from PIL import Image as PIL_Image
-
+urllib3.disable_warnings()
 
 def visualize_regions(image, regions):
     http = urllib3.PoolManager()
