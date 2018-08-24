@@ -2,6 +2,6 @@
 
 {% block content %}
 {% for fname in fnames %}
-  <img src="{{fname}}" width=400>
+  <img src="{{url_for('static', filename=fname)}}" width=1000>
 {% endfor %}
 {% endblock %}

@@ -30,6 +30,7 @@ def search():
             fnames.append(visualize_image(x, edges=[edge]))
         print(edge)
         print(q)
+        fnames = [fname.split('/')[-1] for fname in fnames]
         session['fnames'] = fnames
         return redirect(url_for('results'))
     else:

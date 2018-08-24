@@ -1,4 +1,4 @@
-images/*
+app/static/*
 data/*
 *.graphml
 *.pyc
