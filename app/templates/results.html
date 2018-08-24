@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% for fname in fnames %}
+  <img src="{{fname}}" width=400>
+{% endfor %}
+{% endblock %}
