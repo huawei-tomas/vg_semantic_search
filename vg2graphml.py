@@ -119,12 +119,37 @@ def add_rel_edges(G, rels, rel_disambig, blacklist):
             predicate = rel_disambig.get(rel['predicate'])
             G.add_edge(sub_id, obj_id, relationship_id=rel_id)
             if predicate is not None:
-                G.edges[sub_id, obj_id]['predicate'] = predicate
+                G.edges[sub_id, obj_id]['predicate'] = str(predicate).lower()
                 G.edges[sub_id, obj_id]['canonical_predicate'] = True
             else:
-                G.edges[sub_id, obj_id]['predicate'] = rel['predicate']
+                G.edges[sub_id, obj_id]['predicate'] = str(rel['predicate']).lower()
                 G.edges[sub_id, obj_id]['canonical_predicate'] = False
     return G
+
+def conditional_histo(G):
+    h = {}
+    elist = G.edges
+    for x in elist:
+        obj_id1, obj_id2 = x
+        obj_name1 = G.nodes[obj_id1].get('name')
+        obj_name2 = G.nodes[obj_id2].get('name')
+        rel_val = G.edges[x].get('predicate')
+        obj1_iscanon = G.nodes[obj_id1].get('canonical_name')
+        obj2_iscanon = G.nodes[obj_id2].get('canonical_name')
+        rel_iscanon = G.edges[x].get('canonical_predicate')
+        print(obj_name1, rel_val, obj_name2)
+        if obj1_iscanon and obj2_iscanon and rel_iscanon:
+            if obj_name1 not in h:
+                h[obj_name1] = {rel_val:{obj_name2:1}}
+            else:
+                if rel_val not in h[obj_name1]:
+                    h[obj_name1][rel_val] = {obj_name2:1}
+                else:
+                    if obj_name2 not in h[obj_name1][rel_val]:
+                        h[obj_name1][rel_val][obj_name2] = 1
+                    else:
+                        h[obj_name1][rel_val][obj_name2] += 1
+    return h
 
 def purge_funkiness(fname):
     with open(fname, 'r') as f:
@@ -159,7 +184,7 @@ def main():
 
     # Add object nodes
     print("adding objects as nodes")
-    G, blacklist = add_obj_nodes(G, objs, obj_disambig)
+    G, blacklist = add_obj_nodes(G, objs, obj_disambig, every_nth=1)
 
     # Add edges between object nodes
     print("adding relationships as edges")
