@@ -49,10 +49,12 @@ def add_objects(objs, obj_disambig):
     """
     """
     vertices = []
+    labelname_ids = {}
+    unique_names = 0
     for img in objs:
-        image_id = img["image_id"]
+        # image_id = img["image_id"]
         for obj in img["objects"]:
-            obj_id = obj["object_id"]
+            # obj_id = obj["object_id"]
             name = obj["names"][0].lower()
             canon = obj_disambig.get(name)
             if canon is None:
@@ -60,7 +62,11 @@ def add_objects(objs, obj_disambig):
             else:
                 is_canon = 1
                 name = canon
-            vertices.append([obj_id, "object", "", image_id, name, is_canon])
+            if name not in labelname_ids:
+                unique_names += 1
+                labelname_ids[name] = unique_names
+            labelname_id = labelname_ids[name]
+            vertices.append([labelname_id, "object", "", name, is_canon])
 
     return vertices
 

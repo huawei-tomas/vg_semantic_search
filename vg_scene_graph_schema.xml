@@ -6,8 +6,9 @@
     <!-- First things first, we need an object node -->
     <label name="object">
       <properties>
-        <property name="ObjectID" cardinality="single" dataType="int" />
-        <property name="ImageID" cardinality="single" dataType="int" />
+       <!-- <property name="ObjectID" cardinality="single" dataType="int" />
+        <property name="ImageID" cardinality="single" dataType="int" /> -->
+        <property name="LabelNameID" cardinality="single" dataType="int" />
         <property name="LabelName" cardinality="single" dataType="string" />
         <property name="CanonicalObject" cardinality="single" dataType="int" />
       </properties>
@@ -19,6 +20,9 @@
         <property name="RelationshipID" cardinality="single" dataType="int" />
         <property name="Predicate" cardinality="single" dataType="string" />
         <property name="CanonicalPredicate" cardinality="single" dataType="int" />
+        <property name="ObjectID_obj" cardinality="single" dataType="int" />
+        <property name="ObjectID_sub" cardinality="single" dataType="int" />
+        <property name="ImageID" cardinality="single" dataType="int" />
       </properties>
     </label>
 
