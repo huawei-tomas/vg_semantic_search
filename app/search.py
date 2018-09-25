@@ -29,7 +29,7 @@ def get_results_for_edge(g, edge):
         try:
             fnames.append(visualize_image(x, edges=[edge]))
         except:
-            pass
+            print("God Fucking dammit.")
     print(edge)
     print(q)
     fnames = [fname.split('/')[-1] for fname in fnames]

@@ -2,3 +2,4 @@ app/static/*
 data/*
 *.graphml
 *.pyc
+*.csv

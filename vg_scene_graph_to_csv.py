@@ -4,6 +4,7 @@
 import json
 import zipfile
 import time
+import codecs
 
 def load_objs(obj_fname="./data/objects.json.zip"):
     """Loads objects in from a download of Visual Genome.
@@ -53,7 +54,7 @@ def add_objects(objs, obj_disambig):
     unique_names = 0
     obj_id_label_map = {}
     for img in objs:
-        # image_id = img["image_id"]
+        image_id = img["image_id"]
         for obj in img["objects"]:
             obj_id = obj["object_id"]
             name = obj["names"][0].lower()
@@ -77,13 +78,20 @@ def add_relationships(rels, obj_id_label_map, labelname_ids, rel_disambig):
     """
     edges = []
     for img in rels:
-        image_id = img["image_id"]
+        img_id = img["image_id"]
         for rel in img["relationships"]:
+            rel_id = rel["relationship_id"]
             sub_id = rel["subject"]["object_id"]
-            sub_name = obj_id_label_map[sub_id]
+            sub_name = obj_id_label_map.get(sub_id)
+            if sub_name is None:
+                print("there was a problem with subject {} in relationship {} for image {}".format(sub_id, rel_id, img_id))
+                continue
             sub_label_id = labelname_ids[sub_name]
             obj_id = rel["object"]["object_id"]
-            obj_name = obj_id_label_map[obj_id]
+            obj_name = obj_id_label_map.get(obj_id)
+            if obj_name is None:
+                print("there was a problem with object {} in relationship {} for image {}".format(obj_id, rel_id, img_id))
+                continue
             obj_label_id = labelname_ids[obj_name]
             rel_id = rel["relationship_id"]
             predicate = rel["predicate"].lower()
@@ -98,8 +106,8 @@ def add_relationships(rels, obj_id_label_map, labelname_ids, rel_disambig):
     return edges
 
 def write_csv(data, fname):
-    output = '\n'.join([','.join(map(str, row)) for row in data])
-    with open(fname, "w") as f:
+    output = '\n'.join([','.join(map(unicode, row)) for row in data])
+    with codecs.open(fname, "w", "utf-8") as f:
         f.write(output)
 
 def main():
