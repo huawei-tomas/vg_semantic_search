@@ -51,10 +51,11 @@ def add_objects(objs, obj_disambig):
     vertices = []
     labelname_ids = {}
     unique_names = 0
+    obj_id_label_map = {}
     for img in objs:
         # image_id = img["image_id"]
         for obj in img["objects"]:
-            # obj_id = obj["object_id"]
+            obj_id = obj["object_id"]
             name = obj["names"][0].lower()
             canon = obj_disambig.get(name)
             if canon is None:
@@ -65,12 +66,13 @@ def add_objects(objs, obj_disambig):
             if name not in labelname_ids:
                 unique_names += 1
                 labelname_ids[name] = unique_names
+            obj_id_label_map[obj_id] = name
             labelname_id = labelname_ids[name]
             vertices.append([labelname_id, "object", "", name, is_canon])
 
-    return vertices
+    return vertices, labelname_ids, obj_id_label_map
 
-def add_relationships(rels, rel_disambig):
+def add_relationships(rels, obj_id_label_map, labelname_ids, rel_disambig):
     """
     """
     edges = []
@@ -78,7 +80,11 @@ def add_relationships(rels, rel_disambig):
         image_id = img["image_id"]
         for rel in img["relationships"]:
             sub_id = rel["subject"]["object_id"]
+            sub_name = obj_id_label_map[sub_id]
+            sub_label_id = labelname_ids[sub_name]
             obj_id = rel["object"]["object_id"]
+            obj_name = obj_id_label_map[obj_id]
+            obj_label_id = labelname_ids[obj_name]
             rel_id = rel["relationship_id"]
             predicate = rel["predicate"].lower()
             canon = rel_disambig.get(predicate)
@@ -87,7 +93,7 @@ def add_relationships(rels, rel_disambig):
             else:
                 is_canon = 1
                 predicate = canon
-            edges.append([sub_id, obj_id, "relationship", rel_id, predicate, is_canon])
+            edges.append([sub_label_id, obj_label_id, "relationship", rel_id, predicate, is_canon, obj_id, sub_id, image_id])
 
     return edges
 
@@ -120,11 +126,18 @@ def main():
 
     t0 = time.time()
     print("making list of vertices to export to CSV")
-    obj_list = add_objects(objs, obj_disambig)
+    obj_list, labelname_ids, obj_id_label_map = add_objects(objs, obj_disambig)
     t1 = time.time()
     print("took {} seconds.".format(t1 - t0))
     print("making list of edges to export to CSV")
-    rel_list = add_relationships(rels, rel_disambig)
+
+    rel_list = add_relationships(
+        rels,
+        labelname_ids,
+        obj_id_label_map,
+        rel_disambig
+        )
+
     t2 = time.time()
     print("took {} seconds.".format(t2 - t1))
 
