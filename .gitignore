@@ -3,3 +3,4 @@ data/*
 *.graphml
 *.pyc
 *.csv
+apache-tinkerpop-gremlin-server-3.3.3
