@@ -1,3 +1,5 @@
+# -*- coding: utf-8
+
 from flask import render_template, flash, redirect, request, session, url_for
 from app import app
 from app.forms import SearchForm

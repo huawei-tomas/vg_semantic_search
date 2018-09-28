@@ -8,27 +8,12 @@ import zipfile
 import networkx as nx
 import sys
 
-def fetch_data():
-    urls = [
-            "https://visualgenome.org/static/data/dataset/objects.json.zip",
-            "https://visualgenome.org/static/data/dataset/relationships.json.zip",
-            "https://visualgenome.org/static/data/dataset/object_alias.txt",
-            "https://visualgenome.org/static/data/dataset/relationship_alias.txt"
-           ]
-    if not os.path.exists('data'):
-        os.mkdir('data')
-    else:
-        return
-    os.chdir('data')
-    for url in urls:
-        wget.download(url)
-    os.chdir('..')
 
 def load_objs(obj_fname="./data/objects.json.zip"):
     """Loads objects in from a download of Visual Genome.
 
     Args:
-        obj_fname: The filename of the zipped object JSON from Visual Genome.
+        obj_fname - The filename of the zipped object JSON from Visual Genome.
     """
     if sys.version_info < (3, 0):
         with zipfile.ZipFile(obj_fname, 'r') as f:
@@ -42,7 +27,7 @@ def load_rels(rel_fname="./data/relationships.json.zip"):
     """Loads relationships in from a download of Visual Genome.
 
     Args:
-        rel_fname: The filename of the relationship object JSON from Visual Genome.
+        rel_fname - The filename of the relationship object JSON from Visual Genome.
     """
     if sys.version_info < (3, 0):
         with zipfile.ZipFile(rel_fname, 'r') as f:
@@ -53,7 +38,13 @@ def load_rels(rel_fname="./data/relationships.json.zip"):
     return rels
 
 def make_disambig(alias_fname):
-    """
+    """Makes a disambiguation dictionary to map various labels onto a canonical label.
+
+    Args:
+        alias_fname - Filename of the alias set.
+
+    Returns:
+        disambig - Dictionary with non-canonical to canonical term mapping.
     """
     with open(alias_fname, 'r') as f:
         aliases = f.read().split('\n')[:-1]
@@ -71,14 +62,24 @@ def make_disambig(alias_fname):
 
 
 def add_obj_nodes(G, objs, obj_disambig, every_nth=4):
+    """Adds nodes from the objects in visual genome.
+
+    Args:
+        G - Networkx graph to add objects to.
+        objs - Object data from visual genome.
+        obj_disambig - A disambiguation dictionary.
+        every_nth - downsampling by only adding objects from every nth image.
+
+    Returns:
+        G - Graph with object vertices.
+        junk - List of image_ids to avoid when processing edges.
     """
-    """
-    blacklist = {}
+    junk = {}
     for k, img in enumerate(objs):
         image_id = img['image_id']
         image_url = img.get('image_url')
         if k % every_nth != 0:
-            blacklist[image_id] = 1
+            junk[image_id] = 1
             continue
         for obj in img['objects']:
             x, y, h, w = obj['x'], obj['y'], obj['h'], obj['w']
@@ -103,14 +104,15 @@ def add_obj_nodes(G, objs, obj_disambig, every_nth=4):
             else:
                 G.nodes[obj_id]['name'] = obj['names'][0]
                 G.nodes[obj_id]['canonical_name'] = False
-    return G, blacklist
+    return G, junk
 
-def add_rel_edges(G, rels, rel_disambig, blacklist):
+def add_rel_edges(G, rels, rel_disambig, junk):
     """
     """
     for img in rels:
         image_id = img['image_id']
-        if image_id in blacklist:
+        # Don't add those relationships from these images
+        if image_id in junk:
             continue
         for rel in img['relationships']:
             sub_id = rel['subject']['object_id']
@@ -127,6 +129,8 @@ def add_rel_edges(G, rels, rel_disambig, blacklist):
     return G
 
 def conditional_histo(G):
+    """
+    """
     h = {}
     elist = G.edges
     for x in elist:
@@ -152,6 +156,8 @@ def conditional_histo(G):
     return h
 
 def purge_funkiness(fname):
+    """
+    """
     with open(fname, 'r') as f:
         in_str = f.read()
 
@@ -163,9 +169,6 @@ def purge_funkiness(fname):
 def main():
     """
     """
-
-    # Download object and relationship data from visual genome
-    fetch_data()
     # Load objects and relationships
     print("loading JSON data on scene-graph nodes")
     objs = load_objs()
