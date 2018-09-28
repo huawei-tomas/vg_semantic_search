@@ -84,6 +84,9 @@ def setup_tinkerpop():
     p = subprocess.Popen("chmod +x {}".format(rel_server_fname), shell=True)
     p.communicate()
 
+    # make a static directory for downloading images real quick hold on
+    os.mkdir("app/static")
+
 if __name__ == "__main__":
     fetch_vg_data()
     setup_tinkerpop()
