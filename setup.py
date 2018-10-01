@@ -31,7 +31,7 @@ def subproc_wget(url):
 
 def setup_tinkerpop():
     urls = [
-            # "http://mirrors.ocf.berkeley.edu/apache/tinkerpop/3.3.3/apache-tinkerpop-gremlin-server-3.3.3-bin.zip",
+            "http://mirrors.ocf.berkeley.edu/apache/tinkerpop/3.3.3/apache-tinkerpop-gremlin-server-3.3.3-bin.zip",
             "https://www.dropbox.com/s/nbu3wmmoop0iykz/vg-scene-graph-minimal.graphml"
            ]
     os.mkdir("tmp")
