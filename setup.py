@@ -42,7 +42,7 @@ def setup_tinkerpop():
         print("downloading {}".format(url))
         fnames.append(subproc_wget(url))
 
-    Extract tinkerpop server one directory up.
+    # Extract tinkerpop server one directory up.
     zfile = zipfile.ZipFile(fnames[0], 'r')
     zfile.extractall("..")
 
