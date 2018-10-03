@@ -36,16 +36,15 @@ def setup_tinkerpop():
            ]
     os.mkdir("tmp")
     os.chdir("tmp")
-    #
-    # fnames = []
-    # for url in urls:
-    #     print("downloading {}".format(url))
-    #     fnames.append(wget.download(url))
+    
+    fnames = []
+    for url in urls:
+        print("downloading {}".format(url))
+        fnames.append(subproc_wget(url))
 
-    subproc_wget(urls[0])
-    # Extract tinkerpop server one directory up.
-    # zfile = zipfile.ZipFile(fnames[0], 'r')
-    # zfile.extractall("..")
+    Extract tinkerpop server one directory up.
+    zfile = zipfile.ZipFile(fnames[0], 'r')
+    zfile.extractall("..")
 
     # Move the graphml where it needs to be
     tinkerpop_dir = "apache-tinkerpop-gremlin-server-3.3.3"
