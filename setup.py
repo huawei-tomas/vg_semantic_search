@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf-8
 
+import wget
 import zipfile
 import os
 import shutil
