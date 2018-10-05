@@ -1,7 +1,7 @@
 visual_genome==1.0.0
 matplotlib==2.2.2
 wget==3.2
-urllib3==1.13.1
+urllib3
 Flask==1.0.2
 WTForms==2.2.1
 networkx==2.1

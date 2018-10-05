@@ -84,7 +84,8 @@ def setup_tinkerpop():
     p.communicate()
 
     # make a static directory for downloading images real quick hold on
-    os.mkdir("app/static")
+    if not os.path.exists("app/static"):
+        os.mkdir("app/static")
 
 if __name__ == "__main__":
     fetch_vg_data()
