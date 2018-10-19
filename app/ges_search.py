@@ -2,12 +2,11 @@ import urllib3
 import json
 import certifi
 from visualize_data import visualize_image
-
+import os
 
 http = urllib3.PoolManager(cert_reqs="CERT_REQUIRED", ca_certs=certifi.where())
 
-with open("/home/thomaswood/code/genauth_gesapi/token", "r") as f:
-    token = f.read()
+token = os.environ['GES_API_TOKEN']
 
 # Headers are how we pass through the token.
 headers = {"Content-Type":"application/json"}
