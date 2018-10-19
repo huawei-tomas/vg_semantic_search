@@ -3,7 +3,7 @@
 from flask import render_template, flash, redirect, request, session, url_for
 from app import app
 from app.forms import SearchForm
-from search import get_results_for_edge, get_graph
+from ges_search import get_results_for_edge
 from visualize_data import visualize_image
 import os
 
@@ -25,8 +25,7 @@ def search():
         relationship = request.form.get('relationship', 'in')
         object = request.form.get('object', 'chair')
         edge = (subject, relationship, object)
-        g = get_graph()
-        fnames = get_results_for_edge(g, edge)
+        fnames = get_results_for_edge(edge)
         session['fnames'] = fnames
         return redirect(url_for('results'))
     else:
